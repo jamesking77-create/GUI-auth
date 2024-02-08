@@ -58,7 +58,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/display_movies');
+        const response = await axios.get('https://mrs-ax3k.onrender.com/display_movies');
         setMovies(response.data.movies);
       } catch (error) {
         console.error('Error fetching movies:', error);
@@ -70,7 +70,7 @@ const HomePage = () => {
 
   const handleMovieClick = async (title, id) => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/recommend_movies', {
+      const response = await axios.post('https://mrs-ax3k.onrender.com/recommend_movies', {
         title,
         id
       });
@@ -82,7 +82,7 @@ const HomePage = () => {
 
   const handleSearch = async (query) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/search?query=${query}`);
+      const response = await axios.get(`https://mrs-ax3k.onrender.com/search?query=${query}`);
       setMatchingMovies(response.data.matching_movies);
       console.log(response.data.matching_movies);
     } catch (error) {
@@ -93,7 +93,7 @@ const HomePage = () => {
 
   const handleGenreClick = async (genre) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/search?query=${genre}`);
+      const response = await axios.get(`https://mrs-ax3k.onrender.com/search?query=${genre}`);
       setMatchingMovies(response.data.matching_movies);
       console.log(response.data.matching_movies);
     } catch (error) {
