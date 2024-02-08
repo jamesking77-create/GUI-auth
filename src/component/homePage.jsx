@@ -21,6 +21,8 @@ import im4 from "../asset/the-dark-knight-rises-movie-poster.jpg";
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [matchingMovies, setMatchingMovies] = useState([]);
+  const [viewMode, setViewMode] = useState('recommended'); 
+  const [loading, setLoading] = useState(false);
   const genres = [
     'Action',
     'Adventure',
@@ -60,6 +62,7 @@ const HomePage = () => {
       try {
         const response = await axios.get('https://mrs-ax3k.onrender.com/display_movies');
         setMovies(response.data.movies);
+        setLoading(false); 
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
@@ -69,47 +72,61 @@ const HomePage = () => {
   }, []);
 
   const handleMovieClick = async (title, id) => {
+    setLoading(true); 
     try {
       const response = await axios.post('https://mrs-ax3k.onrender.com/recommend_movies', {
         title,
         id
       });
+      setMatchingMovies(response.data.recommended_movies);
+      setViewMode('recommended');
+      setLoading(false); 
       console.log('Recommendation response:', response.data);
     } catch (error) {
       console.error('Error recommending movies:', error);
+      setLoading(false); 
     }
   };
 
   const handleSearch = async (query) => {
+    setLoading(true); 
     try {
       const response = await axios.get(`https://mrs-ax3k.onrender.com/search?query=${query}`);
       setMatchingMovies(response.data.matching_movies);
+      setViewMode('genre');
+      setLoading(false); 
       console.log(response.data.matching_movies);
     } catch (error) {
       console.error('Error searching movies:', error);
+      setLoading(false); 
     }
   };
 
 
   const handleGenreClick = async (genre) => {
+    setLoading(true); 
     try {
       const response = await axios.get(`https://mrs-ax3k.onrender.com/search?query=${genre}`);
       setMatchingMovies(response.data.matching_movies);
+      setViewMode('genre');
+      setLoading(false); 
       console.log(response.data.matching_movies);
     } catch (error) {
       console.error('Error searching movies:', error);
+      setLoading(false); 
     }
   };
 
   return (
     <div className="container">
-    <p className="heading">MRS</p>
+      <p className="heading">MRS</p>
 
-    <div className="search-container">
+      <div className="search-container">
         <input type="text" placeholder="Search..." onChange={(e) => handleSearch(e.target.value)} />
         <button type="submit">Search</button>
       </div>
 
+      <p className="heading1">TOP 10</p>
       <Swiper
         effect={'coverflow'}
         grabCursor={true}
@@ -131,10 +148,8 @@ const HomePage = () => {
         modules={[EffectCoverflow, Pagination, Navigation]}
         className='swiper_container'
       >
-    
         {movies.map((movie, index) => (
           <SwiperSlide key={index} onClick={() => handleMovieClick(movie.title, movie.id)}>
-         
             {index === 0 && <img src={im1} alt="slide_image" />}
             {index === 1 && <img src={im2} alt="slide_image" />}
             {index === 2 && <img src={im3} alt="slide_image" />}
@@ -155,20 +170,28 @@ const HomePage = () => {
         </div>
         <div className="swiper-pagination"></div>
       </div>
-        
+
       <div className="genres-container">
         {genres.map((genre, index) => (
           <button key={index} className="genre-button" onClick={() => handleGenreClick(genre)}>{genre}</button>
         ))}
       </div>
- 
+
       <div className="recommended-movies">
         <div className="grid-container">
-          {matchingMovies.map((movie, index) => (
+          {viewMode === 'recommended' && matchingMovies.map((movie, index) => (
+            <div key={index} className="grid-item"><p>{movie.title}</p></div>
+          ))}
+          {viewMode === 'genre' && matchingMovies.map((movie, index) => (
             <div key={index} className="grid-item"><p>{movie.title}</p></div>
           ))}
         </div>
       </div>
+      {loading && (
+        <div className="loader-container">
+          <div className="loader"></div> 
+        </div>
+      )}
     </div>
   );
 };
