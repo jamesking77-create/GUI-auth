@@ -67,7 +67,7 @@ body {
 
 .heading {
   padding: 1rem 0;
-  font-size: 3.5rem;
+  font-size: 1.5rem;
   text-align: center;
 }
 
@@ -102,6 +102,7 @@ body {
   height: 42rem;
   border-radius: 2rem;
   object-fit: cover;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
 }
 
 .swiper-slide-shadow-left,
@@ -202,7 +203,15 @@ body {
     background-color: rgb(194, 191, 191);
     height: 30rem;
    width: 100%;
+   text-align: center;
+   font-size: larger;
+   padding: 2rem;
   }
+
+  .grid-item  p{
+   margin-top: 10rem;
+  }
+
 
 
   .search-container {
@@ -220,7 +229,7 @@ body {
   }
   
   .search-container button {
-    background-color: #6a59ff;
+    background-color: green;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -230,6 +239,45 @@ body {
   }
   
   .search-container button:hover {
-    background-color: #5645e7;
+    background-color: darkgreen;
   }
   
+  .genres-container {
+    display: flex;
+    overflow-x: scroll;
+    margin-top: 10px;
+  }
+  
+  .genre-button {
+    background-color: green;
+    color: white;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .genre-button:hover {
+    background-color: darkgreen;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+ 
+  ::-webkit-scrollbar-track {
+    background: #f1f1f100; 
+  }
+   
+
+  ::-webkit-scrollbar-thumb {
+    background: #88888800; 
+  }
+  
+ 
+  ::-webkit-scrollbar-thumb:hover {
+    background: #55555500; 
+  }
