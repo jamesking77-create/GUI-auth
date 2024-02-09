@@ -8,7 +8,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper';
 import '../styles/homepage.css';
-
+import { BASE_URL } from '../../baseUrl';
 
 import im1 from "../asset/avatar-the-way-of-water-movie-poster.jpg"
 import im2 from "../asset/disney-pirates-of-the-caribbean-at-world-s-end-dvd-one-sheet_u-L-Q1RG0M40.jpg"
@@ -21,48 +21,25 @@ import im4 from "../asset/the-dark-knight-rises-movie-poster.jpg";
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [matchingMovies, setMatchingMovies] = useState([]);
-  const [viewMode, setViewMode] = useState('recommended'); 
+  const [viewMode, setViewMode] = useState('recommended');
   const [loading, setLoading] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null); 
+  const [rating, setRating] = useState(0); // Added state for rating
+
   const genres = [
-    'Action',
-    'Adventure',
-    'Comedy',
-    'Drama',
-    'Fantasy',
-    'Horror',
-    'Sci-Fi',
-    'Thriller',
-    'Romance',
-    'Mystery',
-    'Crime',
-    'Animation',
-    'Family',
-    'Documentary',
-    'Biography',
-    'History',
-    'Music',
-    'Musical',
-    'Western',
-    'War',
-    'Sport',
-    'Superhero',
-    'Spy',
-    'Psychological',
-    'Fantasy',
-    'Fiction',
-    'Science',
-    'Political',
-    'Paranormal',
-    'Teen'
+    'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Sci-Fi',
+    'Thriller', 'Romance', 'Mystery', 'Crime', 'Animation', 'Family',
+    'Documentary', 'Biography', 'History', 'Music', 'Musical', 'Western',
+    'War', 'Sport', 'Superhero', 'Spy', 'Psychological', 'Fantasy',
+    'Fiction', 'Science', 'Political', 'Paranormal', 'Teen'
   ];
-  
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('https://mrs-ax3k.onrender.com/display_movies');
+        const response = await axios.get(`${BASE_URL}/display_movies`);
         setMovies(response.data.movies);
-        setLoading(false); 
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
@@ -72,49 +49,71 @@ const HomePage = () => {
   }, []);
 
   const handleMovieClick = async (title, id) => {
-    setLoading(true); 
+    setLoading(true);
     try {
-      const response = await axios.post('https://mrs-ax3k.onrender.com/recommend_movies', {
+      const response = await axios.post(`${BASE_URL}/recommend_movies`, {
         title,
         id
       });
       setMatchingMovies(response.data.recommended_movies);
       setViewMode('recommended');
-      setLoading(false); 
+      setLoading(false);
       console.log('Recommendation response:', response.data);
     } catch (error) {
       console.error('Error recommending movies:', error);
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   const handleSearch = async (query) => {
-    setLoading(true); 
+    setLoading(true);
     try {
-      const response = await axios.get(`https://mrs-ax3k.onrender.com/search?query=${query}`);
+      const response = await axios.get(`${BASE_URL}/search?query=${query}`);
       setMatchingMovies(response.data.matching_movies);
       setViewMode('genre');
-      setLoading(false); 
+      setLoading(false);
       console.log(response.data.matching_movies);
     } catch (error) {
       console.error('Error searching movies:', error);
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
-
   const handleGenreClick = async (genre) => {
-    setLoading(true); 
+    setLoading(true);
     try {
-      const response = await axios.get(`https://mrs-ax3k.onrender.com/search?query=${genre}`);
+      const response = await axios.get(`${BASE_URL}/search?query=${genre}`);
       setMatchingMovies(response.data.matching_movies);
       setViewMode('genre');
-      setLoading(false); 
+      setLoading(false);
       console.log(response.data.matching_movies);
     } catch (error) {
       console.error('Error searching movies:', error);
-      setLoading(false); 
+      setLoading(false);
     }
+  };
+
+  const handleGridItemClick = (movie) => {
+    setSelectedMovie(movie);
+    setRating(movie.rating); // Set rating when a movie is clicked
+  };
+
+  const handleClosePopup = () => {
+    setSelectedMovie(null);
+  };
+
+  // Function to handle rating change
+  const handleRatingChange = (value) => {
+    setRating(value);
+  };
+
+  // Function to save rating
+  const saveRating = () => {
+    // Send rating to backend or perform any necessary action
+    console.log("Rating saved:", rating);
+    // Here you can make a request to save the rating to your backend
+    // Example: axios.post(`${BASE_URL}/save_rating`, { movieId: selectedMovie.id, rating });
+    handleClosePopup(); // Close popup after saving rating
   };
 
   return (
@@ -180,16 +179,39 @@ const HomePage = () => {
       <div className="recommended-movies">
         <div className="grid-container">
           {viewMode === 'recommended' && matchingMovies.map((movie, index) => (
-            <div key={index} className="grid-item"><p>{movie.title}</p></div>
+            <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
+              <p>{movie.title}</p>
+            </div>
           ))}
           {viewMode === 'genre' && matchingMovies.map((movie, index) => (
-            <div key={index} className="grid-item"><p>{movie.title}</p></div>
+            <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
+              <p>{movie.title}</p>
+            </div>
           ))}
         </div>
       </div>
+
+  
+      {selectedMovie && (
+        <div className="popup-container">
+          <div className="popup">
+            <p>Rate: <span style={{color: 'gold', fontWeight: 'bolder'}}> {selectedMovie.title} </span></p>
+            <div className="rating">
+              <span className={rating >= 1 ? 'filled' : ''} onClick={() => handleRatingChange(1)}>★</span>
+              <span className={rating >= 2 ? 'filled' : ''} onClick={() => handleRatingChange(2)}>★</span>
+              <span className={rating >= 3 ? 'filled' : ''} onClick={() => handleRatingChange(3)}>★</span>
+              <span className={rating >= 4 ? 'filled' : ''} onClick={() => handleRatingChange(4)}>★</span>
+              <span className={rating >= 5 ? 'filled' : ''} onClick={() => handleRatingChange(5)}>★</span>
+            </div>
+            <button onClick={saveRating}>Save Rating</button>
+            <button onClick={handleClosePopup}>Close</button>
+          </div>
+        </div>
+      )}
+
       {loading && (
         <div className="loader-container">
-          <div className="loader"></div> 
+          <div className="loader"></div>
         </div>
       )}
     </div>

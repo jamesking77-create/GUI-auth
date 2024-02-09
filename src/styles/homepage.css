@@ -206,7 +206,7 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     grid-gap: 2rem;
     width: 80%;
-    max-width: 124rem; /* Ensure it doesn't exceed the container width */
+    max-width: 124rem; 
   }
   
   .grid-item {
@@ -217,10 +217,16 @@ body {
    font-size: larger;
    padding: 2rem;
    border-radius: 8px;
+   
+  }
+
+  .grid-item{
+
   }
 
   .grid-item  p{
    margin-top: 10rem;
+   color: #fff;
    
   }
 
@@ -322,3 +328,69 @@ body {
     animation: spin 1s linear infinite;
   }
   
+
+  .popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+  
+  .popup {
+    color: #fff;
+    padding: 12rem 3rem 2rem 3rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.095);
+    box-shadow: inset 2px -2px 20px rgba(214, 214, 214, 0.2),
+    inset -3px 3px 3px rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(24px);
+  }
+  
+  .popup img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .popup p {
+    margin-top: 10px;
+  }
+  
+  .popup button {
+    background-color: green;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 8rem;
+    margin: 2rem;
+  }
+  
+  .popup button:hover {
+    background-color: #555;
+  }
+  
+  .rating {
+    font-size: 40px; 
+    margin-top: 20px;
+  }
+  
+  .rating span {
+    cursor: pointer;
+    margin: 0 5px; /* Add space between stars */
+  }
+  
+
+  .rating span.filled {
+    color: gold; /* Turn stars green when hovered or clicked */
+  }
