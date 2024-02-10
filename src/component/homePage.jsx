@@ -25,6 +25,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null); 
   const [rating, setRating] = useState(0); // Added state for rating
+  const [searchQuery, setSearchQuery] = useState(''); // State to store search query
 
   const genres = [
     'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Sci-Fi',
@@ -39,7 +40,6 @@ const HomePage = () => {
       try {
         const response = await axios.get(`${BASE_URL}/display_movies`);
         setMovies(response.data.movies);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
@@ -57,25 +57,23 @@ const HomePage = () => {
       });
       setMatchingMovies(response.data.recommended_movies);
       setViewMode('recommended');
-      setLoading(false);
-      console.log('Recommendation response:', response.data);
     } catch (error) {
       console.error('Error recommending movies:', error);
-      setLoading(false);
+    } finally {
+      setLoading(false); // Stop loading regardless of success or failure
     }
   };
 
-  const handleSearch = async (query) => {
-    setLoading(true);
+  const handleSearch = async () => {
+    setLoading(true); // Start loading
     try {
-      const response = await axios.get(`${BASE_URL}/search?query=${query}`);
+      const response = await axios.get(`${BASE_URL}/search?query=${searchQuery}`);
       setMatchingMovies(response.data.matching_movies);
       setViewMode('genre');
-      setLoading(false);
-      console.log(response.data.matching_movies);
     } catch (error) {
       console.error('Error searching movies:', error);
-      setLoading(false);
+    } finally {
+      setLoading(false); // Stop loading regardless of success or failure
     }
   };
 
@@ -85,11 +83,10 @@ const HomePage = () => {
       const response = await axios.get(`${BASE_URL}/search?query=${genre}`);
       setMatchingMovies(response.data.matching_movies);
       setViewMode('genre');
-      setLoading(false);
-      console.log(response.data.matching_movies);
     } catch (error) {
       console.error('Error searching movies:', error);
-      setLoading(false);
+    } finally {
+      setLoading(false); // Stop loading regardless of success or failure
     }
   };
 
@@ -121,8 +118,8 @@ const HomePage = () => {
       <p className="heading">MRS</p>
 
       <div className="search-container">
-        <input type="text" placeholder="Search..." onChange={(e) => handleSearch(e.target.value)} />
-        <button type="submit">Search</button>
+        <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        <button type="button" onClick={handleSearch}>Search</button>
       </div>
 
       <p className="heading1">TOP 10</p>
@@ -191,7 +188,6 @@ const HomePage = () => {
         </div>
       </div>
 
-  
       {selectedMovie && (
         <div className="popup-container">
           <div className="popup">
