@@ -168,7 +168,7 @@ const HomePage = () => {
       });
       setMovies(updatedMovies);
       setLoading(false);
-      console.log("Rating saved:", rating);
+      
       handleClosePopup();
     } catch (error) {
       console.error("Error saving rating:", error);
