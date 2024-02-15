@@ -57,6 +57,7 @@ html {
 body {
   font-size: 1.6rem;
   background: var(--bg);
+  background-color: rgb(235, 235, 235); 
 }
 
 .container {
@@ -67,7 +68,7 @@ body {
 }
 
 .heading {
-  padding: 1rem 0;
+  padding: 1rem 0; 
   font-size: 1.5rem;
   text-align: center;
 }
@@ -79,7 +80,7 @@ body {
   color: green;
   font-weight: 800;
   
-}
+} t
 
 .swiper_container {
   height: 52rem;
@@ -220,13 +221,12 @@ body {
    
   }
 
-  .grid-item{
-
-  }
+ 
 
   .grid-item  p{
    margin-top: 10rem;
    color: #fff;
+   margin-bottom: 2rem;
    
   }
 
@@ -380,17 +380,33 @@ body {
     background-color: #555;
   }
   
-  .rating {
+  .ratings {
+    padding-bottom: 0.8rem;
     font-size: 40px; 
     margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.349);
+    box-shadow: inset 2px -2px 20px rgba(214, 214, 214, 0.2),
+    inset -3px 3px 3px rgba(255, 255, 255, 0.027);
+    backdrop-filter: blur(24px);
   }
   
-  .rating span {
+  .ratings span {
     cursor: pointer;
-    margin: 0 5px; /* Add space between stars */
+    margin: 0 5px; 
+    
   }
+
+  .rating span{
+   
+    color: white;
+    
+  }
+  
   
 
-  .rating span.filled {
-    color: gold; /* Turn stars green when hovered or clicked */
+  .ratings span.filled {
+    color: gold; 
   }
