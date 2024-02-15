@@ -153,6 +153,7 @@ const HomePage = () => {
   };
 
   const saveRating = async () => {
+    setLoading(true);
     try {
       await axios.post(`${BASE_URL}/update_rating`, {
         id: selectedMovie.id,
@@ -166,7 +167,7 @@ const HomePage = () => {
         return movie;
       });
       setMovies(updatedMovies);
-
+      setLoading(false);
       console.log("Rating saved:", rating);
       handleClosePopup();
     } catch (error) {
