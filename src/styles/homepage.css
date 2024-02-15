@@ -79,8 +79,8 @@ body {
   text-align: center;
   color: green;
   font-weight: 800;
-  
-} t
+  margin-top: 1rem;
+} 
 
 .swiper_container {
   height: 52rem;
@@ -91,6 +91,7 @@ body {
 .swiper-slide {
   width: 37rem;
   height: 42rem;
+  margin-bottom: 5rem;
   position: relative;
 }
 

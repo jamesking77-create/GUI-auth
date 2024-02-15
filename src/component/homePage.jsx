@@ -1,51 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import axios from 'axios';
-import 'swiper/swiper-bundle.css';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { EffectCoverflow, Pagination, Navigation } from 'swiper';
-import '../styles/homepage.css';
-import { BASE_URL } from '../../baseUrl';
+import React, { useState, useEffect } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import axios from "axios";
+import "swiper/swiper-bundle.css";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { EffectCoverflow, Pagination, Navigation } from "swiper";
+import "../styles/homepage.css";
+import { BASE_URL } from "../../baseUrl";
 
-import im1 from "../asset/avatar-the-way-of-water-movie-poster.jpg"
-import im2 from "../asset/disney-pirates-of-the-caribbean-at-world-s-end-dvd-one-sheet_u-L-Q1RG0M40.jpg"
-import im5 from "../asset/p_johncarter_19880_db4d22d7.jpeg"
-import im3 from "../asset/spectre-theatrical-movie-poster.jpg"
-import im6 from "../asset/spider-man-spider-man-3-wallpaper-preview.jpg"
-import im7 from "../asset/tangled-movie-poster.jpg"
+import im1 from "../asset/avatar-the-way-of-water-movie-poster.jpg";
+import im2 from "../asset/disney-pirates-of-the-caribbean-at-world-s-end-dvd-one-sheet_u-L-Q1RG0M40.jpg";
+import im5 from "../asset/p_johncarter_19880_db4d22d7.jpeg";
+import im3 from "../asset/spectre-theatrical-movie-poster.jpg";
+import im6 from "../asset/spider-man-spider-man-3-wallpaper-preview.jpg";
+import im7 from "../asset/tangled-movie-poster.jpg";
 import im4 from "../asset/the-dark-knight-rises-movie-poster.jpg";
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [matchingMovies, setMatchingMovies] = useState([]);
-  const [viewMode, setViewMode] = useState('recommended');
+  const [viewMode, setViewMode] = useState("recommended");
   const [loading, setLoading] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [rating, setRating] = useState(0); 
-  const [searchQuery, setSearchQuery] = useState(''); 
+  const [rating, setRating] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const genres = [
-    'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Sci-Fi',
-    'Thriller', 'Romance', 'Mystery', 'Crime', 'Animation', 'Family',
-    'Documentary', 'Biography', 'History', 'Music', 'Musical', 'Western',
-    'War', 'Sport', 'Superhero', 'Spy', 'Psychological', 'Fantasy',
-    'Fiction', 'Science', 'Political', 'Paranormal', 'Teen'
+    "Action",
+    "Adventure",
+    "Comedy",
+    "Drama",
+    "Fantasy",
+    "Horror",
+    "Sci-Fi",
+    "Thriller",
+    "Romance",
+    "Mystery",
+    "Crime",
+    "Animation",
+    "Family",
+    "Documentary",
+    "Biography",
+    "History",
+    "Music",
+    "Musical",
+    "Western",
+    "War",
+    "Sport",
+    "Superhero",
+    "Spy",
+    "Psychological",
+    "Fantasy",
+    "Fiction",
+    "Science",
+    "Political",
+    "Paranormal",
+    "Teen",
   ];
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/display_movies`);
-        const moviesWithRating = response.data.movies.map(movie => ({
+        const moviesWithRating = response.data.movies.map((movie) => ({
           ...movie,
-          rating: 0 
+          rating: 0,
         }));
         setMovies(moviesWithRating);
       } catch (error) {
-        console.error('Error fetching movies:', error);
+        console.error("Error fetching movies:", error);
       }
     };
 
@@ -53,7 +78,6 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-
     if (selectedMovie) {
       setRating(selectedMovie.rating);
     }
@@ -64,49 +88,54 @@ const HomePage = () => {
     try {
       const response = await axios.post(`${BASE_URL}/recommend_movies`, {
         title,
-        id
+        id,
       });
       setMatchingMovies(response.data.recommended_movies);
-      setViewMode('recommended');
+      setViewMode("recommended");
     } catch (error) {
-      console.error('Error recommending movies:', error);
+      console.error("Error recommending movies:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   const handleSearch = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
-      const movieResponse = await axios.get(`${BASE_URL}/search_movies?query=${searchQuery}`);
+      const movieResponse = await axios.get(
+        `${BASE_URL}/search_movies?query=${searchQuery}`
+      );
       if (movieResponse.data.matching_movies.length > 0) {
- 
         setMatchingMovies(movieResponse.data.matching_movies);
-        setViewMode('genre');
+        setViewMode("genre");
         return;
       }
-    
-      const creditResponse = await axios.get(`${BASE_URL}/search_credits?query=${searchQuery}`);
+
+      const creditResponse = await axios.get(
+        `${BASE_URL}/search_credits?query=${searchQuery}`
+      );
       setMatchingMovies(creditResponse.data.matching_credits);
-      setViewMode('genre');
+
+      setViewMode("genre");
     } catch (error) {
-      console.error('Error searching:', error);
+      console.error("Error searching:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
-  
 
   const handleGenreClick = async (genre) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/search_movies?query=${genre}`);
+      const response = await axios.get(
+        `${BASE_URL}/search_movies?query=${genre}`
+      );
       setMatchingMovies(response.data.matching_movies);
-      setViewMode('genre');
+      setViewMode("genre");
     } catch (error) {
-      console.error('Error searching movies:', error);
+      console.error("Error searching movies:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -118,68 +147,76 @@ const HomePage = () => {
     setSelectedMovie(null);
   };
 
- 
   const handleRatingChange = (value) => {
     setRating(value);
-    setSelectedMovie(prevMovie => ({ ...prevMovie, rating: value }));
+    setSelectedMovie((prevMovie) => ({ ...prevMovie, rating: value }));
   };
 
   const saveRating = async () => {
     try {
-     
       await axios.post(`${BASE_URL}/update_rating`, {
         id: selectedMovie.id,
-        rating: rating
+        rating: rating,
       });
-  
-      const updatedMovies = movies.map(movie => {
+
+      const updatedMovies = movies.map((movie) => {
         if (movie.id === selectedMovie.id) {
-          return { ...movie, vote_average: rating }; 
+          return { ...movie, vote_average: rating };
         }
         return movie;
       });
       setMovies(updatedMovies);
-      
+
       console.log("Rating saved:", rating);
-      handleClosePopup(); 
+      handleClosePopup();
     } catch (error) {
-      console.error('Error saving rating:', error);
+      console.error("Error saving rating:", error);
     }
   };
-  
+
   return (
     <div className="container">
       <p className="heading">MRS</p>
 
       <div className="search-container">
-        <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-        <button type="button" onClick={handleSearch}>Search</button>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button type="button" onClick={handleSearch}>
+          Search
+        </button>
       </div>
 
       <p className="heading1">TOP 10</p>
       <Swiper
-        effect={'coverflow'}
+        effect={"coverflow"}
         grabCursor={true}
         centeredSlides={true}
         loop={true}
-        slidesPerView={'auto'}
+        slidesPerView={"auto"}
         coverflowEffect={{
           rotate: 0,
           stretch: 0,
           depth: 100,
           modifier: 2.5,
         }}
-        pagination={{ el: '.swiper-pagination', clickable: true }}
+        pagination={{ el: ".swiper-pagination", clickable: true }}
         navigation={{
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-          clickable: true
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+          clickable: true,
         }}
         modules={[EffectCoverflow, Pagination, Navigation]}
-        className='swiper_container'
+        className="swiper_container"
       >
         {movies.map((movie, index) => (
-          <SwiperSlide key={index} onClick={() => handleMovieClick(movie.title, movie.id)}>
+          <SwiperSlide
+            key={index}
+            onClick={() => handleMovieClick(movie.title, movie.id)}
+          >
             {index === 0 && <img src={im1} alt="slide_image" />}
             {index === 1 && <img src={im2} alt="slide_image" />}
             {index === 2 && <img src={im3} alt="slide_image" />}
@@ -203,42 +240,50 @@ const HomePage = () => {
 
       <div className="genres-container">
         {genres.map((genre, index) => (
-          <button key={index} className="genre-button" onClick={() => handleGenreClick(genre)}>{genre}</button>
+          <button
+            key={index}
+            className="genre-button"
+            onClick={() => handleGenreClick(genre)}
+          >
+            {genre}
+          </button>
         ))}
       </div>
 
       <div className="recommended-movies">
-        <div className="grid-container">
-          {viewMode === 'recommended' && matchingMovies.map((movie, index) => (
-            <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
-              <p>{movie.title}</p>
-              <div className="rating">
-                {[...Array(1)].map((_, i) => (
-                  <span key={i} className={i < movie.rating ? 'filled' : ''}>{movie.vote_average}: ★</span>
-                ))}
-              </div>
-            </div>
-          ))}
-          {viewMode === 'genre' && matchingMovies.map((movie, index) => (
-            <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
-              <p>{movie.title}</p>
-              <div className="rating">
-                {[...Array(1)].map((_, i) => (
-                  <span key={i} className={i < movie.rating ? 'filled' : ''}>{movie.vote_average}: ★</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+  <div className="grid-container">
+    {viewMode === 'recommended' && matchingMovies.map((movie, index) => (
+      <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
+        <p>{movie.vote_average ? movie.title : `${movie.title}`}<br /><br />{movie.vote_average ? movie.vote_average / 2 : ''} ★</p>
       </div>
+    ))}
+    {viewMode === 'genre' && matchingMovies.map((movie, index) => (
+      <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
+        <p>{movie.vote_average ? movie.title : `${movie.title}`}<br /><br />{movie.vote_average ? movie.vote_average / 2 : ''} ★</p>
+      </div>
+    ))}
+  </div>
+</div>
 
       {selectedMovie && (
         <div className="popup-container">
           <div className="popup">
-            <p>Rate: <span style={{color: 'gold', fontWeight: 'bolder'}}> {selectedMovie.title} </span></p>
+            <p>
+              Rate:{" "}
+              <span style={{ color: "gold", fontWeight: "bolder" }}>
+                {" "}
+                {selectedMovie.title}{" "}
+              </span>
+            </p>
             <div className="ratings">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className={i < rating ? 'filled' : ''} onClick={() => handleRatingChange(i + 1)}>★</span>
+                <span
+                  key={i}
+                  className={i < rating ? "filled" : ""}
+                  onClick={() => handleRatingChange(i + 1)}
+                >
+                  ★
+                </span>
               ))}
             </div>
             <button onClick={saveRating}>Save Rating</button>
@@ -253,7 +298,7 @@ const HomePage = () => {
         </div>
       )}
     </div>
-  );  
+  );
 };
 
 export default HomePage;
