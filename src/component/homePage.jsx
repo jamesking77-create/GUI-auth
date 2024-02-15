@@ -254,12 +254,12 @@ const HomePage = () => {
   <div className="grid-container">
     {viewMode === 'recommended' && matchingMovies.map((movie, index) => (
       <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
-        <p>{movie.vote_average ? movie.title : `${movie.title}`}<br /><br />{movie.vote_average ? movie.vote_average / 2 : ''} ★</p>
+        <p>{movie.vote_average ? movie.title : `${movie.title}`}<br /><br />{movie.vote_average ? movie.vote_average : ''} ★</p>
       </div>
     ))}
     {viewMode === 'genre' && matchingMovies.map((movie, index) => (
       <div key={index} className="grid-item" onClick={() => handleGridItemClick(movie)}>
-        <p>{movie.vote_average ? movie.title : `${movie.title}`}<br /><br />{movie.vote_average ? movie.vote_average / 2 : ''} ★</p>
+        <p>{movie.vote_average ? movie.title : `${movie.title}`}<br /><br />{movie.vote_average ? movie.vote_average: ''} ★</p>
       </div>
     ))}
   </div>
